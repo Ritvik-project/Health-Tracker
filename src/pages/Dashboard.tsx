@@ -2,9 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import {
   Calendar,
-  FileText,
   Clock,
-  MapPin,
   Phone,
   Mail,
   User,
@@ -24,7 +22,10 @@ export const Dashboard: React.FC = () => {
   const upcomingAppointments = appointments.filter(
     (apt) => apt.status === "upcoming" && apt.userId === user?.id
   );
-  const nextAppointment = upcomingAppointments[0];
+  
+  // Sort by date to get the next one
+  const sortedAppointments = [...upcomingAppointments].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  const nextAppointment = sortedAppointments[0];
 
   const getAccentText = () => (isDarkMode ? "text-purple-300" : "text-gray-600");
 
@@ -109,7 +110,7 @@ export const Dashboard: React.FC = () => {
           </Card>
         </aside>
 
-        {/* Main Content */}
+        {/* Main */}
         <main className="flex-1">
           {/* Welcome */}
           <div className="mb-8">
@@ -121,7 +122,7 @@ export const Dashboard: React.FC = () => {
             </p>
           </div>
 
-          {/* Upcoming Appointment */}
+          {/* Next Upcoming Appointment */}
           <Card
             variant="glass"
             className={`border ${
@@ -168,7 +169,50 @@ export const Dashboard: React.FC = () => {
             )}
           </Card>
 
-          {/* Other dashboard widgets can go here */}
+          {/* All Upcoming Appointments as Cards */}
+          <Card
+            variant="glass"
+            className={`border ${
+              isDarkMode
+                ? "border-purple-500/20 bg-slate-800/60 backdrop-blur-lg text-white"
+                : "border-gray-200 bg-white shadow text-black"
+            } max-w-4xl mb-8`}
+          >
+            <h2 className="text-2xl font-semibold mb-4">All Appointments</h2>
+            {upcomingAppointments.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                {sortedAppointments.map((apt) => (
+                  <Card
+                    key={apt.id}
+                    variant="outline"
+                    className={`${
+                      isDarkMode
+                        ? "border-purple-400/40 bg-slate-800/50 text-white"
+                        : "border-gray-200 bg-white shadow text-black"
+                    } p-4`}
+                  >
+                    <h3 className="text-lg font-semibold mb-2 font-display">{apt.doctorName}</h3>
+                    <p className="text-sm mb-1">
+                      <strong>Specialty:</strong> {apt.specialty}
+                    </p>
+                    <p className="text-sm mb-1 flex items-center gap-1">
+                      <Calendar className="w-4 h-4" />
+                      {new Date(apt.date).toLocaleDateString()}
+                    </p>
+                    <p className="text-sm mb-1 flex items-center gap-1">
+                      <Clock className="w-4 h-4" />
+                      {apt.time}
+                    </p>
+                    <p className="text-sm mb-1">
+                      <strong>Reason:</strong> {apt.reason}
+                    </p>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className={getAccentText()}>No appointments booked yet.</div>
+            )}
+          </Card>
         </main>
       </div>
     </div>
