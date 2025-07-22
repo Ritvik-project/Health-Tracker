@@ -1,5 +1,5 @@
-// src/context/RemindersContext.tsx
 import React, { createContext, useState, useContext, useEffect } from "react";
+import { useAuth } from "./AuthContext"; // ✅ Import auth to get current user
 
 export interface Reminder {
   id: string;
@@ -22,14 +22,24 @@ interface RemindersContextType {
 const RemindersContext = createContext<RemindersContextType | undefined>(undefined);
 
 export const RemindersProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [reminders, setReminders] = useState<Reminder[]>(() => {
-    const saved = localStorage.getItem("reminders");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const { user } = useAuth();
+  const userId = user?.id;
 
+  const [reminders, setReminders] = useState<Reminder[]>([]);
+
+  // Load reminders from localStorage when user id is available
   useEffect(() => {
-    localStorage.setItem("reminders", JSON.stringify(reminders));
-  }, [reminders]);
+    if (!userId) return;
+    const stored = localStorage.getItem(`reminders_${userId}`);
+    setReminders(stored ? JSON.parse(stored) : []);
+  }, [userId]);
+
+  // Save reminders to localStorage when they change
+  useEffect(() => {
+    if (userId) {
+      localStorage.setItem(`reminders_${userId}`, JSON.stringify(reminders));
+    }
+  }, [reminders, userId]);
 
   const addReminder = (reminder: Reminder) => {
     setReminders((prev) => [reminder, ...prev]);
