@@ -162,7 +162,42 @@ export const AppointmentBooking: React.FC = () => {
               </div>
             </Card>
 
-            {selectedDoctor && (
+           
+          </div>
+
+          <div className="w-96 sticky top-10 self-start">
+            <Card variant="glass" className={cardClass}>
+              <h2 className="text-xl font-semibold mb-4">Appointment Summary</h2>
+              {selectedDoctor ? (
+                <>
+                  <div className="flex items-center space-x-3 mb-4">
+                    <img
+                      src={selectedDoctor.avatar}
+                      alt={selectedDoctor.name}
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                    <div>
+                      <p className="font-medium">{selectedDoctor.name}</p>
+                      <p className={`text-sm ${accentText}`}>
+                        {selectedDoctor.specialty}
+                      </p>
+                    </div>
+                  </div>
+
+                  {selectedDate && (
+                    <div className={`flex items-center space-x-2 ${accentText} mb-2`}>
+                      <Calendar className="h-4 w-4" />
+                      <span>{new Date(selectedDate).toLocaleDateString()}</span>
+                    </div>
+                  )}
+                  {selectedTime && (
+                    <div className={`flex items-center space-x-2 ${accentText} mb-2`}>
+                      <Clock className="h-4 w-4" />
+                      <span>{selectedTime}</span>
+                    </div>
+                  )}
+
+                   {selectedDoctor && (
               <Card variant="glass" className={cardClass}>
                 <h2 className="text-xl font-semibold mb-4">Select Date & Time</h2>
                 <Input
@@ -206,39 +241,6 @@ export const AppointmentBooking: React.FC = () => {
                 )}
               </Card>
             )}
-          </div>
-
-          <div className="w-96 sticky top-10 self-start">
-            <Card variant="glass" className={cardClass}>
-              <h2 className="text-xl font-semibold mb-4">Appointment Summary</h2>
-              {selectedDoctor ? (
-                <>
-                  <div className="flex items-center space-x-3 mb-4">
-                    <img
-                      src={selectedDoctor.avatar}
-                      alt={selectedDoctor.name}
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                    <div>
-                      <p className="font-medium">{selectedDoctor.name}</p>
-                      <p className={`text-sm ${accentText}`}>
-                        {selectedDoctor.specialty}
-                      </p>
-                    </div>
-                  </div>
-
-                  {selectedDate && (
-                    <div className={`flex items-center space-x-2 ${accentText} mb-2`}>
-                      <Calendar className="h-4 w-4" />
-                      <span>{new Date(selectedDate).toLocaleDateString()}</span>
-                    </div>
-                  )}
-                  {selectedTime && (
-                    <div className={`flex items-center space-x-2 ${accentText} mb-2`}>
-                      <Clock className="h-4 w-4" />
-                      <span>{selectedTime}</span>
-                    </div>
-                  )}
 
                   <Input
                     label="Reason for Visit"
