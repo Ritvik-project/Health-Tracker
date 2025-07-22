@@ -1,5 +1,7 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+// src/context/AppointmentsContext.tsx
+import React, { createContext, useContext, useState, useEffect } from "react";
 
+// Types
 export interface Appointment {
   id: string;
   doctorId: string;
@@ -9,23 +11,30 @@ export interface Appointment {
   time: string;
   reason: string;
   status: "upcoming" | "completed" | "cancelled";
-  userId?: string;
+  userId: string;
 }
 
 interface AppointmentsContextType {
   appointments: Appointment[];
-  addAppointment: (apt: Appointment) => void;
+  addAppointment: (appointment: Appointment) => void;
 }
 
-const AppointmentsContext = createContext<AppointmentsContextType | undefined>(
-  undefined
-);
+// Create context
+const AppointmentsContext = createContext<AppointmentsContextType | undefined>(undefined);
 
-export const AppointmentsProvider = ({ children }: { children: ReactNode }) => {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+// Provider
+export const AppointmentsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [appointments, setAppointments] = useState<Appointment[]>(() => {
+    const stored = localStorage.getItem("appointments");
+    return stored ? JSON.parse(stored) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("appointments", JSON.stringify(appointments));
+  }, [appointments]);
 
   const addAppointment = (appointment: Appointment) => {
-    setAppointments((prev) => [...prev, appointment]);
+    setAppointments((prev) => [appointment, ...prev]);
   };
 
   return (
@@ -35,10 +44,9 @@ export const AppointmentsProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// Hook
 export const useAppointments = () => {
   const context = useContext(AppointmentsContext);
-  if (!context) {
-    throw new Error("useAppointments must be used within AppointmentsProvider");
-  }
+  if (!context) throw new Error("useAppointments must be used within AppointmentsProvider");
   return context;
 };
