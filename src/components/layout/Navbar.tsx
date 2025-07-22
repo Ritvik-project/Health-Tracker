@@ -110,9 +110,9 @@ export const Navbar: React.FC = () => {
                   })}
                 </div>
 
-                {/* Desktop Actions */}
+                {/* Desktop Actions*/}
                 <div className="hidden md:flex items-center space-x-4">
-                  {/* Toggle Theme */}
+                  {/* Toggle Theme*/} 
                   <Button
                     variant="ghost"
                     size="sm"
@@ -122,7 +122,7 @@ export const Navbar: React.FC = () => {
                     {isDarkMode ? '☀️' : '🌙'}
                   </Button>
 
-                  {/* Notifications */}
+                  {/* Notifications 
                   <div className="relative">
                     <button
                       onClick={() => setShowNotifications(!showNotifications)}
@@ -161,13 +161,13 @@ export const Navbar: React.FC = () => {
                     )}
                   </div>
 
-                  {/* Settings */}
+                  {/* Settings *
                   <Link
                     to="/settings"
                     className="p-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition"
                   >
                     <Settings className="h-5 w-5" />
-                  </Link>
+                  </Link> */}
 
                   {/* User Info */}
                   <div className="flex items-center space-x-3 bg-white/10 rounded-xl px-4 py-2 backdrop-blur-sm">
