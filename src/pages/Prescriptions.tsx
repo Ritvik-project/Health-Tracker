@@ -17,7 +17,7 @@ import { useReminders } from '../context/RemindersContext';
 
 export const Prescriptions: React.FC = () => {
   const { isDarkMode } = useTheme();
-  const { reminders, addReminder } = useReminders(); // ✅ from context
+  const { reminders, addReminder } = useReminders();
 
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
@@ -47,8 +47,7 @@ export const Prescriptions: React.FC = () => {
       isDarkMode
         ? 'border-purple-500/20 bg-slate-800/60 text-white'
         : 'border-gray-200 bg-white text-black shadow'
-    }
-  `;
+    }`;
 
   const accentText = isDarkMode ? 'text-purple-300' : 'text-gray-600';
 
@@ -69,6 +68,7 @@ export const Prescriptions: React.FC = () => {
       instructions: '',
       medications: [],
     });
+
     setShowForm(false);
   };
 
@@ -86,6 +86,7 @@ export const Prescriptions: React.FC = () => {
       ...prev,
       medications: [...prev.medications, currentMed],
     }));
+
     setCurrentMed({ name: '', dosage: '', duration: '', frequency: '' });
   };
 
@@ -118,9 +119,7 @@ export const Prescriptions: React.FC = () => {
                 label="Date"
                 type="date"
                 value={form.date}
-                onChange={(e) =>
-                  setForm({ ...form, date: e.target.value })
-                }
+                onChange={(e) => setForm({ ...form, date: e.target.value })}
               />
             </div>
 
@@ -145,20 +144,14 @@ export const Prescriptions: React.FC = () => {
                   placeholder="Frequency"
                   value={currentMed.frequency}
                   onChange={(e) =>
-                    setCurrentMed({
-                      ...currentMed,
-                      frequency: e.target.value,
-                    })
+                    setCurrentMed({ ...currentMed, frequency: e.target.value })
                   }
                 />
                 <Input
                   placeholder="Duration"
                   value={currentMed.duration}
                   onChange={(e) =>
-                    setCurrentMed({
-                      ...currentMed,
-                      duration: e.target.value,
-                    })
+                    setCurrentMed({ ...currentMed, duration: e.target.value })
                   }
                 />
               </div>
@@ -192,7 +185,7 @@ export const Prescriptions: React.FC = () => {
         )}
 
         <div className="space-y-6">
-          {reminders.map((r) => (
+          {reminders.map((r, index) => (
             <Card key={r.id} variant="glass" className={cardStyle}>
               <div className="border-b border-purple-500/20 pb-4 mb-4">
                 <div className="flex items-start justify-between">
@@ -205,8 +198,12 @@ export const Prescriptions: React.FC = () => {
                       <FileText className={`${accentText} h-6 w-6`} />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold">Reminder #{r.id.slice(0, 6)}</h3>
-                      <div className={`flex items-center space-x-4 mt-1 text-sm ${accentText}`}>
+                      <h3 className="text-lg font-semibold">
+                        Reminder #{index + 1}
+                      </h3>
+                      <div
+                        className={`flex items-center space-x-4 mt-1 text-sm ${accentText}`}
+                      >
                         <div className="flex items-center space-x-1">
                           <User className="h-4 w-4" />
                           <span>{r.doctorName}</span>
@@ -224,8 +221,8 @@ export const Prescriptions: React.FC = () => {
                 </div>
               </div>
 
-              {/* Medications */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {/* Medications */}
                 <div>
                   <h4 className="text-lg font-medium mb-3 flex items-center">
                     <Pills className="h-5 w-5 mr-2 text-purple-300" /> Medications
@@ -271,7 +268,6 @@ export const Prescriptions: React.FC = () => {
               {/* Footer */}
               <div className={`mt-6 pt-4 border-t border-purple-500/20 flex justify-between text-sm ${accentText}`}>
                 <span>Reminder set for {new Date(r.date).toLocaleDateString()}</span>
-                <button className="hover:text-purple-400 font-medium">Download PDF</button>
               </div>
             </Card>
           ))}
