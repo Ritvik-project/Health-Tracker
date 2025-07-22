@@ -15,10 +15,9 @@ import { Dashboard } from "./pages/Dashboard";
 import { AppointmentBooking } from "./pages/AppointmentBooking";
 import { Prescriptions } from "./pages/Prescriptions";
 import { AppointmentsProvider } from "./context/AppointmentsContext";
+import { RemindersProvider } from "./context/RemindersContext"; // ✅ ADD THIS
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, isLoading } = useAuth();
 
   if (isLoading) {
@@ -79,7 +78,6 @@ const AppContent: React.FC = () => {
             </PublicRoute>
           }
         />
-
         <Route
           path="/register"
           element={
@@ -88,7 +86,6 @@ const AppContent: React.FC = () => {
             </PublicRoute>
           }
         />
-
         <Route
           path="/dashboard"
           element={
@@ -97,7 +94,6 @@ const AppContent: React.FC = () => {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/appointments"
           element={
@@ -106,7 +102,6 @@ const AppContent: React.FC = () => {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/prescriptions"
           element={
@@ -124,11 +119,13 @@ function App() {
   return (
     <AuthProvider>
       <AppointmentsProvider>
-        <ThemeProvider>
-          <Router>
-            <AppContent />
-          </Router>
-        </ThemeProvider>
+        <RemindersProvider> {/* ✅ Now context works! */}
+          <ThemeProvider>
+            <Router>
+              <AppContent />
+            </Router>
+          </ThemeProvider>
+        </RemindersProvider>
       </AppointmentsProvider>
     </AuthProvider>
   );
